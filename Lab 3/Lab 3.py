@@ -3,43 +3,79 @@ f = open('Products.txt', 'r')
 
 global prod
 prod = []
+
 for line in f:
     line = line.strip()
     line = line.split(';')
     prod.append([line[0], line[1], line[2], line[3]])
 
+max = int(len(prod))
+
 #Задание №1
 def Z1():
     path = input('Введите путь к папке: ')
-    files = next(os.walk(path))[2]
+    files = next(os.walk(path))
     print('Количество файлов в папке: ', len(files))
-    start()
+
+    print('__________________________________________________________\n'
+          '1 - Повторить программу\n'
+          '0 - Выход в меню\n'
+          '__________________________________________________________\n')
+    cont = input('Выберете команды: ')
+    if cont == "1":
+        Z1()
+    elif cont == "0":
+        start()
 
 #Задание №2
 def Z2():
     prod.sort(key=lambda line: int(line[2]), reverse=True)
     for i in range(0, len(prod)):
         print(prod[i])
-    start()
-    return  prod
+
+    print('__________________________________________________________\n'
+          '1 - Повторить программу\n'
+          '0 - Выход в меню\n'
+          '__________________________________________________________\n')
+    cont = input('Выберете команды: ')
+    if cont == "1":
+        Z2()
+    elif cont == "0":
+        start()
+    return prod
 
 #Задание №3
 def Z3():
+    id = []
+    print('                Таблица:')
     for i in range(0, len(prod)):
         print(prod[i])
+    print('0 - Остановка ввода ID')
 
-    ID = input('Введите ID товара: ')
-    if ID.isdigit():
-        ID = int(ID)
+    work = True
+    while work:
+        ID = input('Введите ID товара: ')
+        if ID.isdigit():
+            ID = int(ID)
+            if ID == 0:
+                work = False
+            elif ID <= max:
+                id.append(ID)
+            else:
+                print('Такого ID не существует! Максимальный ID:', max)
+                work = True
+        else:
+            print('Неверный символ! Повторите попытку.')
+            work = True
 
-    chan = int(input('Введите новое кол-во: '))
+    chan = int(input('Введите значение, на которое нужно уменьшить кол-во: '))
     for i in range(0, len(prod)):
-        if int(prod[i][0]) == ID:
-                prod[i][3] = chan
+        for j in range(0, len(id)):
+            if int(prod[i][0]) == int(id[j]):
+                prod[i][3] = int(prod[i][3]) - chan
 
     print('Изменения сохранены!\n'
           '         Новая таблица: ')
-    prod.sort(key=lambda line: int(line[3]), reverse=True)
     for i in range(0, len(prod)):
         print(prod[i])
 
@@ -87,7 +123,16 @@ def Z4():
             new.write('\n')
         print('Файл ', name, ' успешно сохранен!')
         new.close()
-    start()
+
+    print('__________________________________________________________\n'
+          '1 - Повторить программу\n'
+          '0 - Выход в меню\n'
+          '__________________________________________________________\n')
+    cont = input('Выберете команды: ')
+    if cont == "1":
+        Z4()
+    elif cont == "0":
+        start()
 
 #Меню
 def start():
